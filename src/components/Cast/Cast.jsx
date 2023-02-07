@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchMovieCredits } from 'services/movies-api';
+import { Box } from 'Box';
+import noPhoto from '../../images/no_image.jpg';
+import { Photo, Name, Character } from './Cast.styled';
 
 const Cast = () => {
   const [cast, setCast] = useState([]);
@@ -12,22 +15,31 @@ const Cast = () => {
       .catch(error => console.log(error));
   }, [movieId]);
 
-  console.log(cast);
-
   // if (!cast) return;
   return (
-    <ul>
+    <Box
+      as="ul"
+      display="grid"
+      gridGap={5}
+      gridTemplateColumns="repeat(auto-fit, minmax(150px, auto))"
+      pt={5}
+      borderTop="1px solid lightgrey"
+    >
       {cast.map(actor => (
         <li key={actor.id}>
-          <img
-            src={`https://image.tmdb.org/t/p/w200/${actor.profile_path}`}
+          <Photo
+            src={
+              actor.profile_path
+                ? `https://image.tmdb.org/t/p/w200/${actor.profile_path}`
+                : noPhoto
+            }
             alt={actor.name}
           />
-          <p>{actor.name}</p>
-          <p>Character: {actor.character}</p>
+          <Name>{actor.name}</Name>
+          <Character>Character: {actor.character}</Character>
         </li>
       ))}
-    </ul>
+    </Box>
   );
 };
 

@@ -1,12 +1,23 @@
-import { useState, useEffect } from 'react';
-import { Link, useParams, Outlet } from 'react-router-dom';
+import { useState, useEffect, Suspense } from 'react';
+import { useParams, Outlet, useLocation } from 'react-router-dom';
+import { BsArrowLeft } from 'react-icons/bs';
 import { fetchMovieById } from 'services/movies-api';
 import { Box } from 'Box';
-import { Figure, Image, Description } from './MovieDetails.styled';
+import {
+  Figure,
+  Image,
+  Description,
+  ExtraInfo,
+  InfoLink,
+  BackLink,
+} from './MovieDetails.styled';
+import StarRating from 'components/StarRating';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
+  const location = useLocation();
+  const backLinkHref = location.state?.from ?? '/movies';
 
   useEffect(() => {
     fetchMovieById(movieId)
@@ -28,7 +39,11 @@ const MovieDetails = () => {
 
   return (
     <>
-      <Box as="div" display="flex">
+      <BackLink to={backLinkHref}>
+        <BsArrowLeft />
+        Go back
+      </BackLink>
+      <Box as="div" display="flex" mb={5}>
         <Figure>
           <Image
             src={`https://image.tmdb.org/t/p/w300${poster_path}`}
@@ -39,6 +54,7 @@ const MovieDetails = () => {
           <h2>
             {title || name} ({release_date.slice(0, 4)})
           </h2>
+          <StarRating rate={vote_average} />
           <p>User score: {Math.round(vote_average * 10)}%</p>
           <div>
             <h3>Overview:</h3>
@@ -48,13 +64,25 @@ const MovieDetails = () => {
             <h3>Genres:</h3>
             <p>{genres.map(item => item.name).join(' / ')}</p>
           </div>
+          <ExtraInfo>
+            <InfoLink
+              to="cast"
+              state={{ from: location.state?.from ?? '/movies' }}
+            >
+              Cast
+            </InfoLink>
+            <InfoLink
+              to="reviews"
+              state={{ from: location.state?.from ?? '/movies' }}
+            >
+              Reviews
+            </InfoLink>
+          </ExtraInfo>
         </Description>
       </Box>
-      <Box>
-        <Link to="cast">Cast</Link>
-        <Link to="reviews">Reviews</Link>
-      </Box>
-      <Outlet />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Outlet />
+      </Suspense>
     </>
   );
 };

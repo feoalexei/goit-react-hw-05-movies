@@ -1,23 +1,10 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { fetchTrending } from 'services/movies-api';
+import { Link, useLocation } from 'react-router-dom';
 import { Box } from 'Box';
-import { FaStar } from 'react-icons/fa';
+import StarRating from 'components/StarRating';
+import { Image, Title, Year } from './MoviesList.styled';
 
-const MoviesList = () => {
-  const [trendList, setTrendList] = useState([]);
-
-  useEffect(() => {
-    fetchTrending()
-      .then(movies => setTrendList(movies.results))
-      .catch(error => console.log(error));
-  }, []);
-
-  console.log(trendList);
-
-  const generateRating = rate => {
-    return Array(Math.floor(rate)).fill('*');
-  };
+const MoviesList = ({ movies }) => {
+  const location = useLocation();
 
   return (
     <>
@@ -26,28 +13,22 @@ const MoviesList = () => {
         display="grid"
         gridGap={5}
         gridTemplateColumns="repeat(auto-fit, minmax(200px, auto))"
+        mt={5}
       >
-        {trendList.map(movie => (
+        {movies.map(movie => (
           <li key={movie.id}>
             <div>
-              <Link to={`/movies/${movie.id}`}>
-                <img
+              <Link to={`/movies/${movie.id}`} state={{ from: location }}>
+                <Image
                   src={`https://image.tmdb.org/t/p/w300/${movie.poster_path}`}
                   alt={movie.title || movie.name}
                 />
-                {movie.title || movie.name}
+                <Title>{movie.title || movie.name}</Title>
+                {movie.release_date && (
+                  <Year>({movie?.release_date.slice(0, 4)})</Year>
+                )}
               </Link>{' '}
-              {movie.release_date && (
-                <span>({movie?.release_date.slice(0, 4)})</span>
-              )}
-              <Box as="ul" display="flex">
-                {generateRating(movie.vote_average).map(star => (
-                  <li>
-                    <FaStar style={{ fill: 'darkgoldenrod' }} />
-                  </li>
-                ))}{' '}
-                ({movie.vote_average.toFixed(1)}/10)
-              </Box>
+              <StarRating rate={movie.vote_average} />
             </div>
           </li>
         ))}

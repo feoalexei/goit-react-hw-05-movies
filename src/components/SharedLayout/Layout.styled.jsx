@@ -19,7 +19,7 @@ export const Header = styled.header`
 `;
 
 export const Link = styled(NavLink)`
-  text-decoration: none;
+  font-size: ${p => p.theme.fontSizes.l};
   color: black;
 
   &.active {
