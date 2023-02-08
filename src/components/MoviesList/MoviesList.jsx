@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Box } from 'Box';
+import PropTypes from 'prop-types';
 import StarRating from 'components/StarRating';
 import { Image, Title, Year } from './MoviesList.styled';
 
@@ -38,3 +39,7 @@ const MoviesList = ({ movies }) => {
 };
 
 export default MoviesList;
+
+MoviesList.propTypes = {
+  movies: PropTypes.array,
+};
