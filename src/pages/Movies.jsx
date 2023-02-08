@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, useLocation } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { fetchMovieByName } from 'services/movies-api';
 import SearchBox from 'components/SearchBox';
 import MoviesList from 'components/MoviesList/MoviesList';
