@@ -15,7 +15,8 @@ const Cast = () => {
       .catch(error => console.log(error));
   }, [movieId]);
 
-  // if (!cast) return;
+  if (!cast) return;
+
   return (
     <Box
       as="ul"
@@ -25,20 +26,22 @@ const Cast = () => {
       pt={5}
       borderTop="1px solid lightgrey"
     >
-      {cast.map(actor => (
-        <li key={actor.id}>
-          <Photo
-            src={
-              actor.profile_path
-                ? `https://image.tmdb.org/t/p/w200/${actor.profile_path}`
-                : noPhoto
-            }
-            alt={actor.name}
-          />
-          <Name>{actor.name}</Name>
-          <Character>Character: {actor.character}</Character>
-        </li>
-      ))}
+      {cast.length > 0
+        ? cast.map(actor => (
+            <li key={actor.id}>
+              <Photo
+                src={
+                  actor.profile_path
+                    ? `https://image.tmdb.org/t/p/w200/${actor.profile_path}`
+                    : noPhoto
+                }
+                alt={actor.name}
+              />
+              <Name>{actor.name}</Name>
+              <Character>Character: {actor.character}</Character>
+            </li>
+          ))
+        : 'There is no information about the actors'}
     </Box>
   );
 };

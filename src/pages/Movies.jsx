@@ -25,7 +25,11 @@ const Movies = () => {
   return (
     <main>
       <SearchBox onSearch={handleSubmit} />
-      <MoviesList movies={movies} />
+      {movies.length === 0 && name !== '' ? (
+        <p>Sorry, there are no results on your query</p>
+      ) : (
+        <MoviesList movies={movies} />
+      )}
     </main>
   );
 };

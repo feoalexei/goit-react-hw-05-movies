@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useParams, Outlet, useLocation } from 'react-router-dom';
 import { BsArrowLeft } from 'react-icons/bs';
 import { fetchMovieById } from 'services/movies-api';
@@ -12,12 +12,14 @@ import {
   BackLink,
 } from './MovieDetails.styled';
 import StarRating from 'components/StarRating';
+import Loader from '../Loader/Loader';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
   const location = useLocation();
   const backLinkHref = location.state?.from ?? '/movies';
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     fetchMovieById(movieId)
@@ -25,16 +27,28 @@ const MovieDetails = () => {
       .catch(error => console.log(error));
   }, [movieId]);
 
+  const handleClickToScroll = () => {
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+    console.log(scrollRef);
+  };
+
+  // const scrollDown = () => {
+  //   window.scrollTo({
+  //     top: scrollRef.current.offsetTop,
+  //     behavior: 'smooth',
+  //   });
+  // };
+
   if (!movie) return;
 
   const {
-    poster_path,
+    poster_path: poster,
     title,
     name,
     overview,
     genres,
-    vote_average,
-    release_date,
+    vote_average: rate,
+    release_date: date,
   } = movie;
 
   return (
@@ -46,32 +60,40 @@ const MovieDetails = () => {
       <Box as="div" display="flex" mb={5}>
         <Figure>
           <Image
-            src={`https://image.tmdb.org/t/p/w300${poster_path}`}
+            src={`https://image.tmdb.org/t/p/w300${poster}`}
             alt={title || name}
           />
         </Figure>
         <Description>
           <h2>
-            {title || name} ({release_date.slice(0, 4)})
+            {title || name} ({date.slice(0, 4)})
           </h2>
-          <StarRating rate={vote_average} />
-          <p>User score: {Math.round(vote_average * 10)}%</p>
-          <div>
-            <h3>Overview:</h3>
-            <p>{overview}</p>
-          </div>
-          <div>
-            <h3>Genres:</h3>
-            <p>{genres.map(item => item.name).join(' / ')}</p>
-          </div>
+          {rate && <StarRating rate={rate} />}
+          {rate && <p>User score: {Math.round(rate * 10)}%</p>}
+          {overview && (
+            <div>
+              <h3>Overview:</h3>
+              <p>{overview}</p>
+            </div>
+          )}
+          {genres?.length > 0 && (
+            <div>
+              <h3>Genres:</h3>
+              <p>{genres.map(item => item.name).join(' / ')}</p>
+            </div>
+          )}
           <ExtraInfo>
             <InfoLink
+              ref={scrollRef}
+              onClick={handleClickToScroll}
               to="cast"
               state={{ from: location.state?.from ?? '/movies' }}
             >
               Cast
             </InfoLink>
             <InfoLink
+              ref={scrollRef}
+              onClick={handleClickToScroll}
               to="reviews"
               state={{ from: location.state?.from ?? '/movies' }}
             >
@@ -80,7 +102,7 @@ const MovieDetails = () => {
           </ExtraInfo>
         </Description>
       </Box>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loader />}>
         <Outlet />
       </Suspense>
     </>

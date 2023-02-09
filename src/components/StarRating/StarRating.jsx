@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Box } from 'Box';
 import { FaStar, FaRegStar } from 'react-icons/fa';
 
@@ -42,3 +43,7 @@ const StarRating = ({ rate }) => {
   );
 };
 export default StarRating;
+
+StarRating.propTypes = {
+  rate: PropTypes.number.isRequired,
+};
