@@ -23,22 +23,20 @@ const MovieDetails = () => {
   const scrollRef = useRef(null);
 
   useEffect(() => {
-    fetchMovieById(movieId)
-      .then(movie => setMovie(movie))
-      .catch(error => console.log(error));
+    const getMovieById = async () => {
+      try {
+        const data = await fetchMovieById(movieId);
+        setMovie(data);
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    };
+    getMovieById(movieId);
   }, [movieId]);
 
   const handleClickToScroll = () => {
-    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
-    console.log(scrollRef);
+    scrollRef.current.scrollIntoView({ behavior: 'smooth' });
   };
-
-  // const scrollDown = () => {
-  //   window.scrollTo({
-  //     top: scrollRef.current.offsetTop,
-  //     behavior: 'smooth',
-  //   });
-  // };
 
   if (!movie) return;
 

@@ -6,9 +6,15 @@ const TrendList = () => {
   const [trendList, setTrendList] = useState([]);
 
   useEffect(() => {
-    fetchTrending()
-      .then(movies => setTrendList(movies.results))
-      .catch(error => console.log(error));
+    const getTrending = async () => {
+      try {
+        const { results } = await fetchTrending();
+        setTrendList(results);
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    };
+    getTrending();
   }, []);
 
   return (

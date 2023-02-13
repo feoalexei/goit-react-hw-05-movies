@@ -11,9 +11,15 @@ const Movies = () => {
 
   useEffect(() => {
     if (name !== '') {
-      fetchMovieByName(name)
-        .then(data => setMovies(data.results))
-        .catch(error => console.log(error));
+      const getMovieByName = async () => {
+        try {
+          const { results } = await fetchMovieByName(name);
+          setMovies(results);
+        } catch (error) {
+          throw new Error(error.message);
+        }
+      };
+      getMovieByName();
     }
   }, [name]);
 
