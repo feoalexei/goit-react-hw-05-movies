@@ -3,6 +3,7 @@ import { Box } from 'Box';
 import PropTypes from 'prop-types';
 import StarRating from 'components/StarRating';
 import { Image, Title, Year } from './MoviesList.styled';
+import noPoster from '../../images/no_poster.jpg';
 
 const MoviesList = ({ movies }) => {
   const location = useLocation();
@@ -21,9 +22,14 @@ const MoviesList = ({ movies }) => {
             <div>
               <Link to={`/movies/${movie.id}`} state={{ from: location }}>
                 <Image
-                  src={`https://image.tmdb.org/t/p/w300/${movie.poster_path}`}
+                  src={
+                    movie.poster_path
+                      ? `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
+                      : noPoster
+                  }
                   alt={movie.title || movie.name}
                 />
+
                 <Title>{movie.title || movie.name}</Title>
                 {movie.release_date && (
                   <Year>({movie?.release_date.slice(0, 4)})</Year>

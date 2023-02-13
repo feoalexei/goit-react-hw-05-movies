@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, Suspense } from 'react';
-import { useParams, Outlet, useLocation } from 'react-router-dom';
+import { useParams, Outlet, useLocation, NavLink } from 'react-router-dom';
 import { BsArrowLeft } from 'react-icons/bs';
 import { fetchMovieById } from 'services/movies-api';
 import { Box } from 'Box';
@@ -8,11 +8,12 @@ import {
   Image,
   Description,
   ExtraInfo,
-  InfoLink,
   BackLink,
 } from './MovieDetails.styled';
 import StarRating from 'components/StarRating';
 import Loader from '../Loader/Loader';
+import Button from 'components/shared/Button';
+import noPoster from '../../images/no_poster.jpg';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
@@ -54,13 +55,16 @@ const MovieDetails = () => {
   return (
     <>
       <BackLink to={backLinkHref}>
-        <BsArrowLeft />
-        Go back
+        <Button>
+          <BsArrowLeft />
+          Go Back
+        </Button>
       </BackLink>
       <Box as="div" display="flex" mb={5}>
         <Figure>
           <Image
-            src={`https://image.tmdb.org/t/p/w300${poster}`}
+            s
+            src={poster ? `https://image.tmdb.org/t/p/w300${poster}` : noPoster}
             alt={title || name}
           />
         </Figure>
@@ -68,8 +72,8 @@ const MovieDetails = () => {
           <h2>
             {title || name} ({date.slice(0, 4)})
           </h2>
-          {rate && <StarRating rate={rate} />}
-          {rate && <p>User score: {Math.round(rate * 10)}%</p>}
+          {rate > 0 && <StarRating rate={rate} />}
+          {rate > 0 && <p>User score: {Math.round(rate * 10)}%</p>}
           {overview && (
             <div>
               <h3>Overview:</h3>
@@ -83,22 +87,22 @@ const MovieDetails = () => {
             </div>
           )}
           <ExtraInfo>
-            <InfoLink
+            <NavLink
               ref={scrollRef}
               onClick={handleClickToScroll}
               to="cast"
               state={{ from: location.state?.from ?? '/movies' }}
             >
-              Cast
-            </InfoLink>
-            <InfoLink
+              <Button>Cast</Button>
+            </NavLink>
+            <NavLink
               ref={scrollRef}
               onClick={handleClickToScroll}
               to="reviews"
               state={{ from: location.state?.from ?? '/movies' }}
             >
-              Reviews
-            </InfoLink>
+              <Button>Reviews</Button>
+            </NavLink>
           </ExtraInfo>
         </Description>
       </Box>

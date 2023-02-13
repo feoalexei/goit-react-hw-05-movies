@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export const Figure = styled.div`
   min-width: 30%;
@@ -32,41 +32,7 @@ export const ExtraInfo = styled.div`
   }
 `;
 
-export const InfoLink = styled(NavLink)`
-  display: inline-flex;
-  align-items: flex-end;
-  gap: 5px;
-  color: ${p => p.theme.colors.text};
-  border-radius: ${p => p.theme.radii.normal};
-  transition: all 0.4s;
-  padding: 10px 15px;
-  border: 1px solid grey;
-  margin-bottom: ${p => p.theme.space[4]}px;
-
-  &.active {
-    color: ${p => p.theme.colors.accent};
-    border-color: ${p => p.theme.colors.accent};
-  }
-
-  &:hover {
-    color: ${p => p.theme.colors.accent};
-    border-color: ${p => p.theme.colors.accent};
-  }
-`;
-
 export const BackLink = styled(Link)`
-  display: inline-flex;
-  align-items: flex-end;
-  gap: 5px;
-  color: ${p => p.theme.colors.text};
-  border-radius: ${p => p.theme.radii.normal};
-  transition: all 0.4s;
-  padding: 10px 15px;
-  border: 1px solid grey;
+  display: block;
   margin-bottom: ${p => p.theme.space[4]}px;
-
-  &:hover {
-    color: ${p => p.theme.colors.accent};
-    border-color: ${p => p.theme.colors.accent};
-  }
 `;

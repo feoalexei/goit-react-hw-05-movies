@@ -1,3 +1,9 @@
+// import axios from 'axios';
+
+// export const movieService = axios.create({
+//   baseURL: 'https://api.themoviedb.org',
+// });
+
 const BASE_URL = 'https://api.themoviedb.org';
 const API_KEY = 'bb66d39a29feb698f032f2613a49cacc';
 

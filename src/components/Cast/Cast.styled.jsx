@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const Photo = styled.img`
   width: 100%;
+  max-width: 200px;
   height: 250px;
   object-fit: cover;
   border-radius: ${p => p.theme.radii.normal};

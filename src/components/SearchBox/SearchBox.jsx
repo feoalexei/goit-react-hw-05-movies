@@ -12,7 +12,11 @@ const SearchBox = ({ onSearch }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    onSearch(query);
+    onSearch(query.trim());
+    if (query === '') {
+      alert('you should enter something to find a movie');
+    }
+    setQuery('');
   };
 
   return (
@@ -21,6 +25,7 @@ const SearchBox = ({ onSearch }) => {
         type="text"
         onChange={handleChange}
         placeholder="Search movie"
+        value={query}
       />
       <SearchBtn>
         <FaSearch />
